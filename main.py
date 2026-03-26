@@ -8,8 +8,11 @@ import os
 from mlflow.entities.model_registry.prompt_version import (
     PromptVersion,
 )
+
+mlflow.set_tracking_uri("http://localhost:5000")
+
 def main():
-    mlflow.set_experiment("langchain_demo_fg_sa")    
+    mlflow.set_experiment("langchain_with_mlflow_test")    
 
     mlflow.langchain.autolog()  # Enable autologging for LangChain
     
@@ -19,7 +22,7 @@ def main():
             model="gpt-5",
         )
        
-        prompt:PromptVersion = mlflow.genai.load_prompt( os.getenv("PROMPT_TO_USE", "prompts:/initial_prompt/1"))
+        prompt:PromptVersion = mlflow.genai.load_prompt( os.getenv("PROMPT_TO_USE", "prompts:/test_agent1/2"))
         formated_prompt = prompt.format(city="Paris")
         
         response = agent.invoke({"messages": formated_prompt})
