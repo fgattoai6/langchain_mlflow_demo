@@ -1,22 +1,17 @@
 
-import re
 import os
-import requests
-import json
 import mlflow
 from dotenv import load_dotenv  
 from langchain.agents import create_agent
 from langchain_openai import ChatOpenAI
-from langchain_core.messages import HumanMessage
 from mlflow.entities.model_registry.prompt_version import (
     PromptVersion,
 )
-from schemas.damage_report_dataclass import MultiDamageReport
-
+from schemas.damage_report_eng import MultiDamageReport
 def main(input_transcript:str):
     mlflow.set_experiment(os.getenv("MLF_TRACKING_EXPERIMENT", "langchain_with_mlflow_test"))
 
-    chat_model = ChatOpenAI(model = os.getenv("PRICE6_MODEL", "chat-gpt5-mini") )
+    chat_model = ChatOpenAI(model = os.getenv("PRICE6_MODEL", "gpt-5-mini") )
     # the create one agent
     agent = create_agent(model=chat_model)
     agent2 = create_agent(model=chat_model,response_format=MultiDamageReport)
@@ -33,7 +28,7 @@ def main(input_transcript:str):
                 response = agent.invoke({"messages": formated_prompt})
                 response_text = response["messages"][-1].content
                 mlflow.log_text(response_text, "semantic_alignment.json")
-                
+
             with mlflow.start_span("structured_output") as span2:
                 result = agent2.invoke({
                     "messages": [{"role": "user", "content": f"Extract contact info from: {response_text}"}] #probeably we don't need a mlf prompt here
