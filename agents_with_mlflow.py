@@ -123,8 +123,8 @@ def _load_text(name: str) -> str:
     with open(p, "r", encoding="utf-8") as f:
         return f.read()
 
-liste_text = _load_text("liste.txt")
-unit_text = _load_text("unit_allowed.txt")
+
+
 
 def dict_to_report(data: dict) -> MultiDamageReport:
     pieces_dc: List[PieceReport] = []
@@ -214,6 +214,8 @@ def main():
 
         print("TEXT:", text)
 
+        unit_text = _load_text("unit_allowed.txt")
+        liste_text = _load_text("liste.txt")
         prompt1:PromptVersion = mlflow.genai.load_prompt(os.getenv("PROMPT_TO_USE", "prompts:/agent1/1"))
         formated_prompt1 = prompt1.format(unit_text=unit_text, liste_text=liste_text, user_text=text)
         payload1 = {
