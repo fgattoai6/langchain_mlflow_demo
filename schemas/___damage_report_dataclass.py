@@ -1,7 +1,7 @@
 
-# ---------------------------------------------------------------------------
-# Dataclasses
-# ---------------------------------------------------------------------------
+# outdated code
+# we should prefer using pydantic model for this; much much easier
+
 
 @dataclass
 class WorkItem:

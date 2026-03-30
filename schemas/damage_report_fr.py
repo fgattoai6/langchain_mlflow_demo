@@ -35,7 +35,7 @@ class WorkItem(BaseModel):
     unit_price: float = Field(
         0.0,
         ge=0,
-        description="Prix unitaire associé au poste de travaux."
+        description="Prix unitaire associé au poste de travaux exprimé en euros."
     )
 
 

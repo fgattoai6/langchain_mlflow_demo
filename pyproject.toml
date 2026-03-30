@@ -5,6 +5,6 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "fastapi>=0.135.2",
     "mlflow[genai,langchain]>=3.10.1",
 ]
-Step 5/10 : COPY main.py /app/main.py
