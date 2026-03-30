@@ -11,7 +11,7 @@ from schemas.damage_report_eng import MultiDamageReport
 def main(input_transcript:str):
     mlflow.set_experiment(os.getenv("MLF_TRACKING_EXPERIMENT", "langchain_with_mlflow_test"))
 
-    chat_model = ChatOpenAI(model = os.getenv("PRICE6_MODEL", "gpt-5-mini") )
+    chat_model = ChatOpenAI(model = os.getenv("PRICE6_MODEL", "gpt-5") )
     # the create one agent
     agent = create_agent(model=chat_model)
     agent2 = create_agent(model=chat_model,response_format=MultiDamageReport)
@@ -31,7 +31,7 @@ def main(input_transcript:str):
 
             with mlflow.start_span("structured_output") as span2:
                 result = agent2.invoke({
-                    "messages": [{"role": "user", "content": f"Extract contact info from: {response_text}"}] #probeably we don't need a mlf prompt here
+                    "messages": [{"role": "user", "content": f"Extrait les dégats constaté dans la description suivante: \n{response_text}"}] 
                 })
                 result:MultiDamageReport = result["structured_response"]
                 mlflow.log_text(str(result), "result2.txt")
