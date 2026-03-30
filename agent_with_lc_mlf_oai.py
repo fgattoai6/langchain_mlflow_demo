@@ -45,9 +45,10 @@ def main():
     mlflow.langchain.autolog()  # Enable autologging for LangChain
     # load the prompt 
     print("running ...")
-    with mlflow.start_run(run_name="agent_tests"):
-        with mlflow.start_span("all_run") as allrunspan:
-            with mlflow.start_span("agent1") as span1:
+    with mlflow.start_run(run_name="p6_plus_agents"):
+        with mlflow.start_span("p6_plus") as allrunspan:
+            allrunspan.set_attribute("input_transcript", str(trs))
+            with mlflow.start_span("semantic_alignment") as span1:
                 print("check1 ...")
                 prompt:PromptVersion = mlflow.genai.load_prompt( os.getenv("PROMPT_TO_USE", "prompts:/price6p_agent0/1"))
                 formated_prompt = prompt.format(transcript=trs)
@@ -59,7 +60,7 @@ def main():
                 # log_text 2 arguments, the second one is to create a file in ar tifacts 
                 mlflow.log_text(response_text, "conversation.json")
             print("step1 done!")
-            with mlflow.start_span("agent2") as span2:
+            with mlflow.start_span("structured_output") as span2:
                 print("check2 ...")
                 result = agent2.invoke({
                     "messages": [{"role": "user", "content": f"Extract contact info from: {response_text}"}]
@@ -67,6 +68,9 @@ def main():
 
                 result:MultiDamageReport = result["structured_response"]
                 mlflow.log_text(str(result), "result2.txt")
+                
+
+
 if __name__ == "__main__":
     load_dotenv(override=True)  # Load environment variables from .env file
     main()
